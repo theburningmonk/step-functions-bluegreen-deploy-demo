@@ -38,7 +38,7 @@ stepFunctions:
             Type: Choice
             Choices:
               - Variable: $
-                StringEquals: ThumbsUp
+                StringEquals: Approved
                 Next: Success
             Default: Failed
           Success:
