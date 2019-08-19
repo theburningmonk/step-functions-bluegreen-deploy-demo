@@ -16,12 +16,8 @@ stepFunctions:
     myStateMachine:
       useExactVersion: true
       definition:
-        StartAt: Wait
+        StartAt: Hello
         States:
-          Wait:
-            Type: Wait
-            Seconds: 150
-            Next: Hello
           Hello:
             Type: Task
             Resource:
