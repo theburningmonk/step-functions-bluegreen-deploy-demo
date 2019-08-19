@@ -6,9 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "serverless": "^1.49.0",
-    "serverless-aws-alias": "^1.7.2",
-    "serverless-cloudformation-sub-variables": "^0.2.1",
-    "serverless-step-functions": "^2.3.0"
+    "serverless-step-functions": "^2.5.0"
   },
   "scripts": {
     "sls": "sls"

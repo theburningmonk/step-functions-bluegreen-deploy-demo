@@ -2,17 +2,10 @@ service: sfn-bluegreen-deploy-demo
 
 plugins:
   - serverless-step-functions
-  - serverless-aws-alias
-  - serverless-cloudformation-sub-variables
 
 provider:
   name: aws
   runtime: nodejs8.10
-
-custom:
-  stage: ${opt:stage, self:provider.stage, dev}
-  prefix: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:${self:service}-${self:custom.stage}
-  alias: ${opt:alias, self:custom.stage}
 
 functions:
   hello:
@@ -21,8 +14,7 @@ functions:
 stepFunctions:
   stateMachines:
     myStateMachine:
-      role:
-        Fn::GetAtt: [StateMachineRole, Arn]
+      useExactVersion: true
       definition:
         StartAt: Wait
         States:
@@ -32,7 +24,8 @@ stepFunctions:
             Next: Hello
           Hello:
             Type: Task
-            Resource: ${self:custom.prefix}-hello:${self:custom.alias}
+            Resource:
+              Fn::GetAtt: [hello, Arn]
             Next: Decide
           Decide:
             Type: Choice
@@ -45,26 +38,3 @@ stepFunctions:
             Type: Succeed
           Failed:
             Type: Fail
-
-resources:
-  Resources:
-    StateMachineRole:
-      Type: AWS::IAM::Role
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service: states.us-east-1.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-          - PolicyName: dev-us-east-1-sfn-bluegreen-deploy-demo-statemachine
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action: lambda:InvokeFunction
-                  Resource: 
-                    - ${self:custom.prefix}-hello
-                    - ${self:custom.prefix}-hello:*
