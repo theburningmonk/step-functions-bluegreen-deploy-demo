@@ -5,7 +5,7 @@
   "main": "handler.js",
   "dependencies": {},
   "devDependencies": {
-    "serverless": "^1.49.0",
+    "serverless": "^1.83.3",
     "serverless-step-functions": "^2.5.0"
   },
   "scripts": {
